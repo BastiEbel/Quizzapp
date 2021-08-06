@@ -10,6 +10,18 @@ body {
     align-items: center;
 }
 
+.quiz-anwser {
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    padding-left: 20px;
+}
+
+.quiz-anwser:hover {
+    cursor: pointer;
+    background-color: rgb(247, 247, 247);
+}
+
 .quiz-card {
     width: 30rem;
 }
