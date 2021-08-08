@@ -32,11 +32,19 @@ let questions = [
         'right_answer': 1
     },
     {
+        'question': 'Welches Attribut kann man NICHT für Textarea verwenden?',
+        'answer1': 'readonly',
+        'answer2': 'max',
+        'answer3': 'from',
+        'answer4': 'spellcheck',
+        'right_answer': 1
+    },
+    {
         'question': 'Wie wählst du alle Elemente vom Typ &lt;a&gt; mit dem Attribut Title aus?',
-        'answer1': 'Robbie Williams',
-        'answer2': 'Lady Gaga',
-        'answer3': 'Tim Berners-Lee',
-        'answer4': 'Justin Bieber',
+        'answer1': 'a[title]{...}',
+        'answer2': 'a > title {...}',
+        'answer3': 'a.title {...}',
+        'answer4': 'a=title {...}',
         'right_answer': 1
     },
     {
@@ -50,6 +58,9 @@ let questions = [
 ];
 
 let currentQuestion = 0;  //variable erstellen die auf 0 gesetzt wird
+let rightquestion = 0; //variable erstellen die auf 0 gesetzt wird
+let AUDIO_SUCCESS = new Audio('sounds/success.mp3');
+let AUDIO_FAIL = new Audio('sounds/fail.mp3');
 
 //load function
 function init() {
@@ -59,31 +70,41 @@ function init() {
 }
 
 function showquestion() {
-    let question = questions[currentQuestion];
+    
+    if (gameisover()) {
+        showendscreen();
+    } else {
+        updateprogressbar();
+        updatenextquestion();
+    }
+}
 
-    document.getElementById('questiontext').innerHTML = question['question']; //fragt die Frage ab und zeigt sie an
-
-    document.getElementById('answer1').innerHTML = question['answer1']; //fragt die Antworten ab und zeigt sie an
-    document.getElementById('answer2').innerHTML = question['answer2'];
-    document.getElementById('answer3').innerHTML = question['answer3'];
-    document.getElementById('answer4').innerHTML = question['answer4'];
+function gameisover(){
+    return currentQuestion >= questions.length;
 }
 
 function answer(selectedBTN) {  //definierte onclick Funktion selectedBTN ruft die id des geklickten Elements ab.
     let question = questions[currentQuestion];
 
-    let rightAnswer = `answer${question['right_answer']}`;
+    let rightAnswer = `answer${question['right_answer']}`; //die richtige Antwort anzeigen 
 
     let questionanswer = selectedBTN.slice(-1); // das letzte Zeichen ('Char') wird vom string abgefragt.
 
-    if (questionanswer == question['right_answer']) { // Abfrage ob die Antwort richtig oder falsch ist
+    if (rightAnwserSelected(questionanswer)) { // Abfrage ob die Antwort richtig oder falsch ist
         document.getElementById(selectedBTN).classList.add('question-right');
+        AUDIO_SUCCESS.play(); //Musik bei erfolg abspielen
+        rightquestion++;
     } else {
         document.getElementById(selectedBTN).classList.add('question-wrong');
         document.getElementById(rightAnswer).classList.add('question-right');
+        AUDIO_FAIL.play(); // Musik bei misserfolg abspielen
     }
 
     document.getElementById('next-button').disabled = false; //Button wird Enabled
+}
+
+function rightAnwserSelected(questionanswer) {
+    return questionanswer == question['right_answer'];
 }
 
 function nextQuestion() {
@@ -91,12 +112,22 @@ function nextQuestion() {
 
     document.getElementById('next-button').disabled = true; //Button wird Disabled
 
-    removeButtons();
+    removeButtons(); // buttons zurücksetzen
 
-    showquestion();
+    showquestion(); //nächste frage laden
+}
+
+function restartGame(){
+    //alles zurücksetzen
+    rightquestion = 0;
+    currentQuestion = 0;
+    document.getElementById('quiz-end').style = 'display: none';
+    document.getElementById('quiz-body').style = '';
+    init();
 }
 
 function removeButtons() {
+    //Anzeige zurücksetzen
     document.getElementById('answer1').classList.remove('question-right');
     document.getElementById('answer1').classList.remove('question-wrong');
     document.getElementById('answer2').classList.remove('question-right');
@@ -105,4 +136,28 @@ function removeButtons() {
     document.getElementById('answer3').classList.remove('question-wrong');
     document.getElementById('answer4').classList.remove('question-right');
     document.getElementById('answer4').classList.remove('question-wrong');
+}
+
+function showendscreen() {
+    document.getElementById('quiz-end').style = ''; //display: none entfernen
+    document.getElementById('quiz-body').style = 'display: none'; // display: none hinzufügen
+    document.getElementById('end-of-question').innerHTML = questions.length; //Anzeige Anzahl der Fragen 
+    document.getElementById('right-of-question').innerHTML = rightquestion; //Anzeige von wieviel Fragen da richtig sind
+}
+
+function updateprogressbar(){
+    let percent = (currentQuestion +1) / questions.length;
+    percent = Math.round(percent * 100); //Progress bar prozent Rechnung 
+    document.getElementById('progress-bar').innerHTML = `${percent} %`; //Prozent Anzeige in Progress bar
+    document.getElementById('progress-bar').style = `width ${percent}%`; //die Width zu Prozent Anzeige anpassen
+}
+
+function updatenextquestion(){
+    let question = questions[currentQuestion];
+    document.getElementById('question-of').innerHTML = currentQuestion + 1; //Anzeige um einen erhöhen
+    document.getElementById('questiontext').innerHTML = question['question']; //fragt die Frage ab und zeigt sie an
+    document.getElementById('answer1').innerHTML = question['answer1']; //fragt die Antworten ab und zeigt sie an
+    document.getElementById('answer2').innerHTML = question['answer2'];
+    document.getElementById('answer3').innerHTML = question['answer3'];
+    document.getElementById('answer4').innerHTML = question['answer4'];
 }

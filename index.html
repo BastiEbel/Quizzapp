@@ -29,7 +29,26 @@
     <div class="container">
         <div class="card  quiz-card">
             <img src="img/backgraound.jpg" class="card-img-top">
-            <div class="card-body">
+
+            <div class="progress">
+                <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25"
+                    aria-valuemin="0" aria-valuemax="100">25%</div>
+            </div>
+
+            <div id="quiz-end" class="card-body" style="display: none;">
+                Quizzapp ist beendet
+                <div>
+                    Du hast <b id="right-of-question">XXX</b> von <b id="end-of-question">XXX</b> Fragen richtig
+                    beantwortet!!
+                </div>
+                
+                <div class="restartBTN">
+                    <button onclick="restartGame()" class="btn btn-dark">Game neustarten</button>
+                </div>
+            </div>
+
+
+            <div class="card-body" id="quiz-body">
                 <h5 class="card-title" id="questiontext">Frage</h5>
 
                 <div onclick="answer('answer1')" class="card quiz-anwser mb-2" id="answer1">
@@ -39,29 +58,30 @@
                 </div>
 
                 <div onclick="answer('answer2')" class="card quiz-anwser mb-2" id="answer2">
-                    <div class="card-body">                        
+                    <div class="card-body">
                         Antwort
                     </div>
                 </div>
 
                 <div onclick="answer('answer3')" class="card quiz-anwser mb-2" id="answer3">
-                    <div class="card-body">                        
+                    <div class="card-body">
                         Antwort
                     </div>
                 </div>
 
                 <div onclick="answer('answer4')" class="card quiz-anwser mb-2" id="answer4">
-                    <div class="card-body">                        
+                    <div class="card-body">
                         Antwort
                     </div>
                 </div>
 
                 <div class="question-futter">
                     <span>
-                        <b>1</b> von <b id="number">5</b> Fragen
+                        <b id="question-of">1</b> von <b id="number">5</b> Fragen
                     </span>
 
-                    <button onclick="nextQuestion()" id="next-button" disabled class="btn btn-dark">Nächste Frage</button>
+                    <button onclick="nextQuestion()" id="next-button" disabled class="btn btn-dark">Nächste
+                        Frage</button>
                 </div>
 
             </div>

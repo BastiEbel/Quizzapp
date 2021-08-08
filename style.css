@@ -48,6 +48,8 @@ body {
     background-size: contain;
 }
 
-.d-none {
-    display: none;
+.restartBTN {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
 }
