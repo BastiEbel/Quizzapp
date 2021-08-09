@@ -57,6 +57,7 @@ let questions = [
     }
 ];
 
+
 let currentQuestion = 0;  //variable erstellen die auf 0 gesetzt wird
 let rightquestion = 0; //variable erstellen die auf 0 gesetzt wird
 let AUDIO_SUCCESS = new Audio('sounds/success.mp3');
@@ -90,7 +91,7 @@ function answer(selectedBTN) {  //definierte onclick Funktion selectedBTN ruft d
 
     let questionanswer = selectedBTN.slice(-1); // das letzte Zeichen ('Char') wird vom string abgefragt.
 
-    if (rightAnwserSelected(questionanswer)) { // Abfrage ob die Antwort richtig oder falsch ist
+    if (questionanswer == question['right_answer']) { // Abfrage ob die Antwort richtig oder falsch ist
         document.getElementById(selectedBTN).classList.add('question-right');
         AUDIO_SUCCESS.play(); //Musik bei erfolg abspielen
         rightquestion++;
@@ -103,11 +104,9 @@ function answer(selectedBTN) {  //definierte onclick Funktion selectedBTN ruft d
     document.getElementById('next-button').disabled = false; //Button wird Enabled
 }
 
-function rightAnwserSelected(questionanswer) {
-    return questionanswer == question['right_answer'];
-}
-
 function nextQuestion() {
+    AUDIO_FAIL.pause();
+    AUDIO_SUCCESS.pause();
     currentQuestion++; //wird von z.b. 0 auf 1 erhöht usw.
 
     document.getElementById('next-button').disabled = true; //Button wird Disabled
@@ -121,6 +120,7 @@ function restartGame(){
     //alles zurücksetzen
     rightquestion = 0;
     currentQuestion = 0;
+    document.getElementById('bg-quiz-end').src = 'img/background.jpg';
     document.getElementById('quiz-end').style = 'display: none';
     document.getElementById('quiz-body').style = '';
     init();
@@ -139,6 +139,7 @@ function removeButtons() {
 }
 
 function showendscreen() {
+    document.getElementById('bg-quiz-end').src = 'img/bg-end.jpg';
     document.getElementById('quiz-end').style = ''; //display: none entfernen
     document.getElementById('quiz-body').style = 'display: none'; // display: none hinzufügen
     document.getElementById('end-of-question').innerHTML = questions.length; //Anzeige Anzahl der Fragen 
@@ -149,7 +150,7 @@ function updateprogressbar(){
     let percent = (currentQuestion +1) / questions.length;
     percent = Math.round(percent * 100); //Progress bar prozent Rechnung 
     document.getElementById('progress-bar').innerHTML = `${percent} %`; //Prozent Anzeige in Progress bar
-    document.getElementById('progress-bar').style = `width ${percent}%`; //die Width zu Prozent Anzeige anpassen
+    document.getElementById('progress-bar').style = `width: ${percent}%`; //die Width zu Prozent Anzeige anpassen
 }
 
 function updatenextquestion(){
